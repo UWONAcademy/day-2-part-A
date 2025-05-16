@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UWON Academy Listening Vocabulary Test - Day 2 Part A</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #f0fdf4);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      padding: 40px 20px;
+      color: #073b4c;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      max-width: 720px;
+      width: 100%;
+      border-top: 6px solid #38b2ac;
+    }
+
+    h1.main-title {
+      font-weight: 700;
+      text-align: center;
+      color: #134e4a;
+      line-height: 1.4;
+      word-break: break-word;
+      font-size: 7vw;
+      margin-bottom: 10px;
+    }
+
+    h1.main-title small {
+      display: block;
+      font-weight: 600;
+      font-size: 5vw;
+      color: #38b2ac;
+      margin-top: 5px;
+    }
+
+    h2.report-title {
+      text-align: center;
+      color: #134e4a;
+      font-size: 5vw;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    h2.report-title small {
+      display: block;
+      font-size: 4.2vw;
+      color: #38b2ac;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+
+    @media (min-width: 768px) {
+      h1.main-title {
+        font-size: 32px;
+      }
+      h1.main-title small {
+        font-size: 20px;
+      }
+      h2.report-title {
+        font-size: 28px;
+      }
+      h2.report-title small {
+        font-size: 18px;
+      }
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      background-color: #38b2ac;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2c7a7b;
+    }
+
+    .error-feedback {
+      margin-top: 12px;
+      color: #d64545;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    th {
+      background-color: #38b2ac;
+      color: white;
+    }
+
+    select {
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e0;
+      background-color: white;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    #start-button {
+      background: linear-gradient(to right, #3b82f6, #38b2ac);
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    #start-button:hover {
+      background: linear-gradient(to right, #2563eb, #2c7a7b);
+    }
+
+    /* 防止整个页面横向滚动 */
+    body {
+      overflow-x: hidden;
+    }
+
+    /* 包裹表格的容器，支持横向滚动 */
+    .table-wrapper {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    /* 设置表格的最小宽度，防止内容太挤 */
+    .table-wrapper table {
+      min-width: 640px;
+    } 
+
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div id="test-view">
+      <h1 class="main-title">
+        UWON Academy Listening Vocabulary Test
+        <small>Day 2 Part A</small>
+      </h1>
+
+      <div><strong>Time：</strong><span id="timer">0</span> second</div>
+
+      <div id="start-section">
+        <button id="start-button">Start</button>
+      </div>
+
+      <div id="test-section" class="hidden">
+        <input type="text" id="user-input" placeholder="请听后输入单词" autocomplete="off" />
+        <button id="submit-button">提交</button>
+        <div id="feedback" class="error-feedback"></div>
+      </div>
+    </div>
+
+    <div id="report-view" class="hidden">
+      <h2 class="report-title">
+        📊 UWON Academy Listening Vocabulary Test Report
+        <small>Day 2 Part A</small>
+      </h2>
+      <p id="report-time"></p>
+      <div id="report-table"></div>
+    </div>
+  </div>
+
+  <script>
+    const words = [
+        { word: "form", meaning: "表格；形式", partOfSpeech: "n/v" },
+        { word: "plus", meaning: "加；此外", partOfSpeech: "conj/prep" },
+        { word: "natural", meaning: "自然的；天生的", partOfSpeech: "adj" },
+        { word: "ability", meaning: "能力", partOfSpeech: "n" },
+        { word: "results", meaning: "结果（复数）", partOfSpeech: "n" },
+        { word: "solution", meaning: "解决方案", partOfSpeech: "n" },
+        { word: "evening", meaning: "傍晚；晚上", partOfSpeech: "n" },
+        { word: "general", meaning: "一般的；总体的", partOfSpeech: "adj" },
+        { word: "statistics", meaning: "统计；统计数据", partOfSpeech: "n" },
+        { word: "priority", meaning: "优先事项；优先权", partOfSpeech: "n" },
+        { word: "certificate", meaning: "证书；证明", partOfSpeech: "n" },
+        { word: "sale", meaning: "销售；促销", partOfSpeech: "n" },
+        { word: "further", meaning: "进一步的；促进", partOfSpeech: "adj/v" },
+        { word: "effect", meaning: "效果；影响", partOfSpeech: "n" },
+        { word: "exhibition", meaning: "展览", partOfSpeech: "n" },
+        { word: "shoes", meaning: "鞋子（复数）", partOfSpeech: "n" },
+        { word: "wheel", meaning: "车轮；方向盘", partOfSpeech: "n" },
+        { word: "recruit", meaning: "招聘；新成员", partOfSpeech: "v/n" },
+        { word: "April", meaning: "四月", partOfSpeech: "n" },
+        { word: "tutorials", meaning: "辅导课（复数）", partOfSpeech: "n" },
+        { word: "discount", meaning: "折扣", partOfSpeech: "n" },
+        { word: "various", meaning: "各种各样的", partOfSpeech: "adj" },
+        { word: "care", meaning: "关心；照料", partOfSpeech: "n/v" },
+        { word: "credit", meaning: "信用；学分", partOfSpeech: "n" },
+        { word: "July", meaning: "七月", partOfSpeech: "n" },
+        { word: "practical", meaning: "实际的；实用的", partOfSpeech: "adj" },
+        { word: "travelers", meaning: "旅行者（复数）", partOfSpeech: "n" },
+        { word: "June", meaning: "六月", partOfSpeech: "n" },
+        { word: "accommodation", meaning: "住宿", partOfSpeech: "n" },
+        { word: "Sunday", meaning: "星期日", partOfSpeech: "n" },
+        { word: "Saturday", meaning: "星期六", partOfSpeech: "n" },
+        { word: "least", meaning: "最少的", partOfSpeech: "adj" },
+        { word: "First", meaning: "第一的", partOfSpeech: "adj" },
+        { word: "London", meaning: "伦敦", partOfSpeech: "n" },
+        { word: "mature", meaning: "成熟的", partOfSpeech: "adj" },
+        { word: "history", meaning: "历史", partOfSpeech: "n" },
+        { word: "entrance", meaning: "入口；入场", partOfSpeech: "n" },
+        { word: "purse", meaning: "钱包；手提包", partOfSpeech: "n" },
+        { word: "radio", meaning: "收音机；广播", partOfSpeech: "n" },
+        { word: "level", meaning: "水平；等级", partOfSpeech: "n" },
+        { word: "children", meaning: "孩子们", partOfSpeech: "n" },
+        { word: "flexible", meaning: "灵活的", partOfSpeech: "adj" },
+        { word: "drinks", meaning: "饮品（复数）", partOfSpeech: "n" },
+        { word: "confidence", meaning: "自信；信任", partOfSpeech: "n" },
+        { word: "store", meaning: "商店；储存", partOfSpeech: "n/v" },
+        { word: "Union", meaning: "工会；联盟", partOfSpeech: "n" },
+        { word: "zoo", meaning: "动物园", partOfSpeech: "n" },
+        { word: "tour", meaning: "旅游；参观", partOfSpeech: "n/v" },
+        { word: "offer", meaning: "提供；提议", partOfSpeech: "v/n" },
+        { word: "standard", meaning: "标准；规范", partOfSpeech: "n" },
+        { word: "view", meaning: "观点；视野", partOfSpeech: "n" },
+        { word: "return", meaning: "返回；归还", partOfSpeech: "v/n" },
+        { word: "exam", meaning: "考试", partOfSpeech: "n" },
+        { word: "handbook", meaning: "手册", partOfSpeech: "n" },
+        { word: "quality", meaning: "质量；品质", partOfSpeech: "n" },
+        { word: "case", meaning: "情况；案件", partOfSpeech: "n" },
+        { word: "smoking", meaning: "吸烟", partOfSpeech: "n" },
+        { word: "language", meaning: "语言", partOfSpeech: "n" },
+        { word: "different", meaning: "不同的", partOfSpeech: "adj" },
+        { word: "individual", meaning: "个人；单独的", partOfSpeech: "n/adj" },
+        { word: "environment", meaning: "环境", partOfSpeech: "n" },
+        { word: "tickets", meaning: "票（复数）", partOfSpeech: "n" },
+        { word: "requirement", meaning: "要求；需求", partOfSpeech: "n" },
+        { word: "technical", meaning: "技术的", partOfSpeech: "adj" },
+        { word: "experiment", meaning: "实验；尝试", partOfSpeech: "n/v" },
+        { word: "dollars", meaning: "美元（复数）", partOfSpeech: "n" },
+        { word: "colleges", meaning: "大学（复数）", partOfSpeech: "n" },
+        { word: "readers", meaning: "读者；阅读器", partOfSpeech: "n" },
+        { word: "bank", meaning: "银行；堤岸", partOfSpeech: "n" },
+        { word: "variety", meaning: "多样性；种类", partOfSpeech: "n" },
+        { word: "place", meaning: "地方；位置", partOfSpeech: "n" },
+        { word: "theory", meaning: "理论", partOfSpeech: "n" }
+    ];
+
+    const errorOptions = ["不认识单词", "辨音问题", "拼写错误", "不认识中文"];
+    let currentIndex = 0;
+    let startTime = null;
+    let interval = null;
+    let errors = [];
+    let currentWord = null;
+
+    const timerEl = document.getElementById('timer');
+    const inputEl = document.getElementById('user-input');
+    const submitBtn = document.getElementById('submit-button');
+    const feedbackEl = document.getElementById('feedback');
+
+    const testView = document.getElementById('test-view');
+    const startSection = document.getElementById('start-section');
+    const testSection = document.getElementById('test-section');
+    const reportView = document.getElementById('report-view');
+    const reportTime = document.getElementById('report-time');
+    const reportTable = document.getElementById('report-table');
+    const startBtn = document.getElementById('start-button');
+
+    function startTimer() {
+      startTime = Date.now();
+      interval = setInterval(() => {
+        timerEl.textContent = Math.floor((Date.now() - startTime) / 1000);
+      }, 1000);
+    }
+
+    function speakWord(word) {
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = 'en-US';
+      speechSynthesis.speak(utterance);
+    }
+
+    function loadWord() {
+      currentWord = words[currentIndex];
+      inputEl.value = '';
+      feedbackEl.textContent = '';
+      inputEl.disabled = false;
+      inputEl.focus();
+      speakWord(currentWord.word);
+    }
+
+    function showFeedback(isCorrect) {
+      const correctText = `意思：${currentWord.partOfSpeech}，${currentWord.meaning}`;
+      if (isCorrect) {
+        feedbackEl.innerHTML = `✅ 正确！<br>${correctText}`;
+      } else {
+        feedbackEl.innerHTML = `❌ 正确拼写是：<strong>${currentWord.word}</strong><br>${correctText}`;
+      }
+    }
+
+    function showReportPage() {
+      clearInterval(interval);
+      const totalTime = Math.floor((Date.now() - startTime) / 1000);
+      const correctCount = words.length - errors.length;
+      const accuracy = ((correctCount / words.length) * 100).toFixed(1); // 保留1位小数
+      testView.classList.add('hidden');
+      reportView.classList.remove('hidden');
+      reportTime.innerHTML = `
+        <strong>总用时：</strong>${totalTime} 秒<br>
+        <strong>正确率：</strong>${correctCount} / ${words.length} (${accuracy}%)
+`;
+
+      if (errors.length === 0) {
+        reportTable.innerHTML = '<p>全部正确！太棒了！🎉</p>';
+        return;
+      }
+
+      const rows = errors.map((e, index) => {
+        const optionsHTML = errorOptions.map(opt => {
+          const selected = e.errorType === opt ? 'selected' : '';
+          return `<option value="${opt}" ${selected}>${opt}</option>`;
+        }).join('');
+        return `
+          <tr>
+            <td>${e.word}</td>
+            <td>${e.userInput || '（空）'}</td>
+            <td>${e.word}</td>
+            <td>${e.meaning}</td>
+            <td>${e.partOfSpeech}</td>
+            <td>
+              <select data-index="${index}" onchange="updateErrorType(event)">
+                ${optionsHTML}
+              </select>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      reportTable.innerHTML = `
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>单词</th>
+                <th>错误拼写</th>
+                <th>正确拼写</th>
+                <th>中文意思</th>
+                <th>词性</th>
+                <th>错误类型</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function updateErrorType(event) {
+      const index = event.target.getAttribute('data-index');
+      const newType = event.target.value;
+      errors[index].errorType = newType;
+    }
+
+    function submitAnswer() {
+      const userAnswer = inputEl.value.trim().toLowerCase();
+      inputEl.disabled = true;
+
+      const isCorrect = userAnswer === currentWord.word.toLowerCase();
+      showFeedback(isCorrect);
+
+      if (!isCorrect) {
+        errors.push({
+          ...currentWord,
+          userInput: userAnswer,
+          errorType: "拼写错误"
+        });
+      }
+
+      setTimeout(() => {
+        currentIndex++;
+        if (currentIndex < words.length) {
+          loadWord();
+        } else {
+          showReportPage();
+        }
+      }, isCorrect ? 1000 : 1500);
+    }
+
+    submitBtn.addEventListener('click', submitAnswer);
+    inputEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        submitAnswer();
+      }
+    });
+
+    startBtn.addEventListener('click', () => {
+      startSection.classList.add('hidden');
+      testSection.classList.remove('hidden');
+      currentIndex = 0;
+      errors = [];
+      startTimer();
+      setTimeout(() => {
+        loadWord();
+      }, 300);
+    });
+
+    window.updateErrorType = updateErrorType;
+  </script>
+</body>
+</html>
